@@ -1,33 +1,36 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
 
+<section>
+    
+    <nav class="navbar navbar-expand-lg ml-5">
 
-<nav class="navbar navbar-expand-lg">
+        <ul class="navbar-nav mr-auto">
+            <li class="active">
+                <a href="/" class="nav-link">MyCostumes</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">About</a>
+            </li>
 
-                <ul class="navbar-nav">
-                    <li class="active">
-                        <a href="#" class="nav-link">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">About</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">My Orders</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Cart</a>
-                    </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">My Orders</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Cart</a>
+            </li>
 
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Contact</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="/login" class="nav-link">Login</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Contact</a>
+            </li>
+             {{#if req.session.user}}
+            <li class="nav-item">
+                <a href="/login" class="nav-link">Login</a>
+            </li>
+            {{else}}
+            <li class="nav-item">
+                <a href="/logout" class="nav-link">Logout{{req.session.user.username}}</a>
+            </li>
+            {{/if}}
+        </ul>
+        </div>
+    </nav>
+</section>

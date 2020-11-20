@@ -8,6 +8,10 @@ var hbs=require("express-handlebars")
 var adminRouter = require('./routes/admin');
 var usersRouter = require('./routes/users');
 var fileupload= require('express-fileupload')
+var db =require('./config/connection')
+var mongoClient=require('mongodb').mongoClient
+var session=require('express-session')
+
 
 var app = express();
 
@@ -24,6 +28,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileupload())
+app.use(session({
+  secret:"key",
+  cookie:{maxAge:6000000}
+}))
+
+db.connect((err)=>{
+  if (err)
+  console.log("Connection error"+err)
+  else
+ console.log("Database connected");
+})
 
 app.use('/', usersRouter);
 app.use('/admin', adminRouter);

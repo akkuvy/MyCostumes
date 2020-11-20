@@ -1,0 +1,32 @@
+
+<div class="container mt-5">
+    
+    <div class="row">
+        {{#each products}}
+        <div class="col-md-4 col-sm-6 mt-5">
+            <div class="product-grid">
+                
+                <div class="product-image">
+                    <a href="/view-product/{{this._id}}">
+                        <img  class="pic-1" style="height: 35em; width:25em; " src="/product-images/{{this._id}}.jpeg">
+                    </a>
+                    <ul class="social">
+                        <li><a href="/view-product/{{this._id}}" data-tip="Quick View"><i class="fa fa-search"></i></a></li>
+                        <li><a href="" data-tip="Add to Wishlist"><i class="fa fa-shopping-bag"></i></a></li>
+                        <li><a href="/addto-cart/{{this._id}}" data-tip="Add to Cart"><i class="fa fa-shopping-cart"></i></a></li>
+                    </ul>
+                    <span class="product-new-label">Sale</span>
+                    <span class="product-discount-label">{{this.OFF}}</span>
+                </div>
+                <div class="product-content">
+                    <h3 class="title"><a href="#">{{this.name}}</a></h3>
+                    <div class="price"> ₹{{this.price}}
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+       {{/each}}
+    </div>
+
+</div>
