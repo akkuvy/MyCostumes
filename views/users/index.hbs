@@ -13,7 +13,7 @@
                     <ul class="social">
                         <li><a href="/view-product/{{this._id}}" data-tip="Quick View"><i class="fa fa-search"></i></a></li>
                         <li><a href="" data-tip="Add to Wishlist"><i class="fa fa-shopping-bag"></i></a></li>
-                        <li><a href="/addto-cart/{{this._id}}" data-tip="Add to Cart"><i class="fa fa-shopping-cart"></i></a></li>
+                        <li><a  data-tip="Add to Cart" onclick="addtoCart('{{this._id}}')"><i class="fa fa-shopping-cart"></i></a></li>
                     </ul>
                     <span class="product-new-label">Sale</span>
                     <span class="product-discount-label">{{this.OFF}}</span>
@@ -30,3 +30,4 @@
     </div>
 
 </div>
+

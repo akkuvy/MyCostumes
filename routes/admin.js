@@ -32,7 +32,7 @@ router.get("/delete-products/:id", (req, res) => {
 });
 router.get("/edit-products/:id", (req, res) => {
   let id = req.params.id;
-  products = productHelpers.getProduct(id).then((products) => {
+  let products = productHelpers.getProduct(id).then((products) => {
   
     res.render("admin/edit-product", { products });
   });

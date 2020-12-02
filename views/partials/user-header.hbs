@@ -15,21 +15,23 @@
                 <a href="#" class="nav-link">My Orders</a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">Cart</a>
+                <a href="/cart" class="nav-link">Cart <span  class="badge badge-dark" id="cart-count">{{cartCount}}</span></a>
             </li>
 
             <li class="nav-item">
                 <a href="#" class="nav-link">Contact</a>
             </li>
-             {{#if req.session.user}}
-            <li class="nav-item">
-                <a href="/login" class="nav-link">Login</a>
-            </li>
-            {{else}}
-            <li class="nav-item">
-                <a href="/logout" class="nav-link">Logout{{req.session.user.username}}</a>
-            </li>
-            {{/if}}
+             {{#if user}}
+          <li class="nav-item">
+            <a class="nav-link"  href="/logout">Logout  ({{user.username}})</a>
+            
+          </li>
+          {{else}}
+          <li class="nav-item">
+            <a class="nav-link"  href="/login">login</a>
+          </li>
+          {{/if}}
+         
         </ul>
         </div>
     </nav>
