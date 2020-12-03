@@ -74,18 +74,29 @@ router.get("/addto-cart/:id", (req, res) => {
     });
 });
 router.get("/cart", checkLoggedin, async (req, res) => {
-  let user = req.session.user;
+  let userId = req.session.user._id;
+  let user =req.session.user
   let products = await userHelpers.getCartProducts(req.session.user._id);
-  res.render("users/cart", { products, user });
+  let total=await userHelpers.getTotalPrice(req.session.user._id)
+   
+  res.render("users/cart", { products, user,total,userId});
+
 });
 router.post('/change-product-quantity',(req,res,next)=>{
-   userHelpers.changeProductQuantity(req.body).then((response)=>{
-     res.json(response)
+   userHelpers.changeProductQuantity(req.body).then(async(response)=>{
+     response.total=await userHelpers.getTotalPrice(req.body.user)
+      res.json(response)
    })
 })
 router.post('/remove-product',(req,res,next)=>{
   userHelpers.removeProduct(req.body).then((response)=>{
     res.json(response)
   })
+})
+router.get('/checkout',(req,res)=>{
+  userHelpers.getTotalPrice(req.session.user._id).then((total)=>{
+    res.render('users/checkout',{total})
+  })
+
 })
 module.exports = router;

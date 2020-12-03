@@ -1,133 +1,152 @@
-	<div class="container">
-	        <div class="row">
-			    <div class="col-lg-8">
-			        <div class="main-heading">Shopping Cart</div>
-			        <div class="table-cart">
-	                    <table>
-	                        <thead>
-	                            <tr>
-	                                <th>Product</th>
-	                                <th>Quantity</th>
-									<th></th>
-	                                <th>Total</th>
-	                                <th></th>
-	                            </tr>
-	                        </thead>
-							{{#each products}}
-	                        <tbody>
-	                            <tr>
-	                                <td>
-	                                	<div class="display-flex align-center">
-		                                    <div class="img-product">
-		                                        <img src="/product-images/{{this.products._id}}.jpeg" alt="" class="mCS_img_loaded">
-		                                    </div>
-		                                    <div class="name-product">
-		                                        {{this.products.name}}
-		                                       
-		                                    </div>
-		                                    <div class="price">
-		                                        {{this.products.price}}
-		                                    </div>
-	                                    </div>
-	                                </td>
-	                                <td >
-										<button class="btn btn-danger btn-sm cart-items-count mr-3" onclick="changeProductQuantity('{{this._id}}','{{this.products._id}}',-1)">-</button>
-										<span id="{{this.products._id}}">{{this.quantity}}</span>
-										<button class="btn btn-success btn-sm cart-items-count ml-3" onclick="changeProductQuantity('{{this._id}}','{{this.products._id}}',1)" >+</button>
-	                                    
-	                                </td>
-									<td>
-										<button class="btn btn-danger btn-sm" onclick="removeProduct('{{this._id}}','{{this.products._id}}')"> ✖</button>
-									</td>
-	                                <td>
-	                                    <div class="total">
-	                                        $6,250.00
-	                                    </div>
-	                                </td>
-	                                <td>
-	                                    <a href="#" title="">
-	                                        <img src="images/icons/delete.png" alt="" class="mCS_img_loaded">
-	                                    </a>
-	                                </td>
-	                            </tr>
-	                            <tr>
-	                                <td>
-	                                </td>
-	                                <td>
-	                                    <a href="#" title="">
-	                                        <img src="images/icons/delete.png" alt="" class="mCS_img_loaded">
-	                                    </a>
-	                                </td>
-	                            </tr>
-	                        </tbody>
-							{{/each}}
-	                    </table>
-	                    <div class="coupon-box">
-	                        <form action="#" method="get" accept-charset="utf-8">
-	                            <div class="coupon-input">
-	                            </div>
-	                        </form>
-	                    </div>
-			        </div>
-			        <!-- /.table-cart -->
-			    </div>
-			    <!-- /.col-lg-8 -->
-			  
-			    <!-- /.col-lg-4 -->
+<div class="container">
+	<div class="row">
+		<div class="col-lg-8">
+			<div class="main-heading">Shopping Cart</div>
+			<div class="table-cart">
+				<table>
+					<thead>
+						<tr>
+							<th>Product</th>
+							<th>Quantity</th>
+							<th></th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					{{#each products}}
+					<tbody>
+						<tr>
+							<td>
+								<div class="display-flex align-center">
+									<div class="img-product">
+										<img src="/product-images/{{this.products._id}}.jpeg" alt=""
+											class="mCS_img_loaded">
+									</div>
+									<div class="name-product">
+										{{this.products.name}}
+
+									</div>
+									<div class="price">
+										{{this.products.price}}
+									</div>
+								</div>
+							</td>
+							<td>
+								<button class="btn btn-danger btn-sm cart-items-count mr-3"
+									onclick="changeProductQuantity('{{this._id}}','{{this.products._id}}','{{../userId}}',-1)">-</button>
+								<span id="{{this.products._id}}">{{this.quantity}}</span>
+								
+								<button class="btn btn-success btn-sm cart-items-count ml-3"
+									onclick="changeProductQuantity('{{this._id}}','{{this.products._id}}','{{../userId}}',1)">+</button>
+                                
+							</td>
+							<td>
+								<button class="btn btn-danger btn-sm"
+									onclick="removeProduct('{{this._id}}','{{this.products._id}}')"> ✖</button>
+							{{!-- </td>
+							<td>
+								<div class="total">
+									$6,250.00
+								</div>
+							</td> --}}
+							<td>
+								<a href="#" title="">
+									<img src="images/icons/delete.png" alt="" class="mCS_img_loaded">
+								</a>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							</td>
+							<td>
+								<a href="#" title="">
+									<img src="images/icons/delete.png" alt="" class="mCS_img_loaded">
+								</a>
+							</td>
+						</tr>
+					</tbody>
+					{{/each}}
+				</table>
 			</div>
+			<!-- /.table-cart -->
 		</div>
+		<!-- /.col-lg-8 -->
+
+		<!-- /.col-lg-4 -->
 	</div>
-
-	<script>
-		function changeProductQuantity(cartId,proId,count){
-		 let quantity=parseInt(document.getElementById(proId).innerHTML)
-			
-			$.ajax({
-				url:'/change-product-quantity',
-				data:{
-					cart:cartId,
-					product:proId,
-					count:count,
-					quantity:quantity
+</div>
+</div>
+<div>
+	<div class="cart-totals">
+		<h3>Cart Totals</h3>
+		<form action="#" method="get" accept-charset="utf-8">
+			<table>
+				<tbody>
+					<tr class="total-row">
+						<td>Total</td>
+						<td class="price-total">₹<span id="total">{{total}}</span></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="btn-cart-totals">
 				
-				},
-					method:'post',
-					success:(response)=>{
-						if(response.removeProduct){
-							alert("The product is removed from the cart")
-							location.reload()
-						}
-						else{
-						 document.getElementById(proId).innerHTML=quantity+count
-						}
-					
+				<a href="/checkout" class="checkout round-black-btn" title="">Proceed to Checkout</a>
+			</div>
+			<!-- /.btn-cart-totals -->
+		</form>
+		<!-- /form -->
+	</div>
+	<!-- /.cart-totals -->
+</div>
 
+<script>
+	function changeProductQuantity(cartId,proId,userId,count) {
+		let quantity = parseInt(document.getElementById(proId).innerHTML)
+	        $.ajax({
+			url: '/change-product-quantity',
+			data: {
+				user:userId,
+				cart: cartId,
+				product: proId,
+				count: count,
+				quantity: quantity,
+			},
+			method: 'post',
+			success: (response) => {
+				if (response.removeProduct) {
+					alert("The product is removed from the cart")
+					location.reload()
+				}
+				else {
+					document.getElementById(proId).innerHTML = quantity + count
+					document.getElementById('total').innerHTML=response.total
+				}
+
+
+			}
+
+		})
+	}
+
+	function removeProduct(cartId, proId) {
+		var confirmation = confirm("Do you want to remove the product from the cart?")
+		if (confirmation == true) {
+			$.ajax({
+				url: '/remove-product',
+				data: {
+					cart: cartId,
+					product: proId
+				},
+				method: 'post',
+				success: (response) => {
+					if (response.removeProduct) {
+						alert("The product is removed from the cart")
+						location.reload()
+					}
 				}
 
 			})
 		}
 
-		function removeProduct(cartId,proId){
-			var confirmation=confirm("Do you want to remove the product from the cart?")
-			if (confirmation==true){
-				$.ajax({
-					url:'/remove-product',
-					data:{
-						cart:cartId,
-						product:proId
-					},
-					method:'post',
-					success:(response)=>{
-						if (response.removeProduct){
-							alert("The product is removed from the cart")
-							location.reload()
-						}
-					}
-
-				})
-			}
-
-		}
-	</script>
-	
-	
+	}
+</script>

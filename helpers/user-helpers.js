@@ -186,7 +186,7 @@ module.exports = {
           },
           { $inc: { "products.$.quantity": prodetials.count } }
         ).then(()=>{
-         resolve(true)
+         resolve({status:true})
         })
       }
     
@@ -206,5 +206,51 @@ module.exports = {
        resolve({removeProduct:true})
      })
     })
+  },
+  getTotalPrice(userId){
+   return new Promise (async(resolve,reject)=>{
+    const total = await db
+    .get()
+    .collection(collection.CART_COLLECTION)
+    .aggregate([
+      {
+        $match: {
+          user: ObjectId(userId),
+        },
+      },
+      {
+        $unwind: "$products",
+      },
+      {
+        $project: {
+          item: "$products.item",
+          quantity: "$products.quantity",
+        },
+      },
+      {
+        $lookup: {
+          from: collection.PRODUCT_COLLECTION,
+          localField: "item",
+          foreignField: "_id",
+          as: "products",
+        },
+      },
+      {
+        $project: {
+          item: 1,
+          quantity: 1,
+          products: { $arrayElemAt: ["$products", 0] },
+        },
+      },
+      {
+        $group:{
+          _id:null,
+          total:{$sum:{$multiply:['$quantity','$products.price']}}
+        }
+      }
+    ])
+    .toArray();
+  resolve(total[0].total);
+   })
   }
 };

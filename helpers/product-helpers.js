@@ -6,6 +6,7 @@ const objectID = require("mongodb").ObjectID;
 
 module.exports = {
   addProduct: (product, callback) => {
+    product.price=parseInt(product.price)
     db.get()
       .collection("product")
       .insertOne(product)
