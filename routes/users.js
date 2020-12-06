@@ -70,33 +70,54 @@ router.get("/addto-cart/:id", (req, res) => {
   userHelpers
     .addtoCart(req.session.user._id, req.params.id)
     .then((response) => {
-   res.json({status:true})
+      res.json({ status: true });
     });
 });
 router.get("/cart", checkLoggedin, async (req, res) => {
   let userId = req.session.user._id;
-  let user =req.session.user
+  let user = req.session.user;
   let products = await userHelpers.getCartProducts(req.session.user._id);
-  let total=await userHelpers.getTotalPrice(req.session.user._id)
-   
-  res.render("users/cart", { products, user,total,userId});
+  let total = await userHelpers.getTotalPrice(req.session.user._id);
 
+  res.render("users/cart", { products, user, total, userId });
 });
-router.post('/change-product-quantity',(req,res,next)=>{
-   userHelpers.changeProductQuantity(req.body).then(async(response)=>{
-     response.total=await userHelpers.getTotalPrice(req.body.user)
-      res.json(response)
-   })
+router.post("/change-product-quantity", (req, res, next) => {
+  userHelpers.changeProductQuantity(req.body).then(async (response) => {
+    response.total = await userHelpers.getTotalPrice(req.body.user);
+    res.json(response);
+  });
+});
+router.post("/remove-product", (req, res, next) => {
+  userHelpers.removeProduct(req.body).then((response) => {
+    res.json(response);
+  });
+});
+router.get("/checkout", (req, res) => {
+  user = req.session.user;
+  userHelpers.getTotalPrice(req.session.user._id).then((total) => {
+    res.render("users/checkout", { user, total });
+  });
+});
+router.post("/checkout", async (req, res) => {
+  let userId = req.session.user._id;
+  let user = req.session.user;
+  let order = req.body;
+  let products = await userHelpers.getCartProducts(req.session.user._id);
+  let total = await userHelpers.getTotalPrice(req.session.user._id);
+  userHelpers.placeOrder(order, products, total, userId).then((response) => {
+    res.render("users/order-placed", { products, total, user, order });
+  });
+});
+router.get("/order", checkLoggedin, async (req, res) => {
+  user = req.session.user;
+  let orderDetials = await userHelpers.getOrderDetials(req.session.user._id);
+  res.render("users/orders", { orderDetials, user });
+});
+router.get('/view-ordered-products/:id',async(req,res)=>{
+  user=req.session.user;
+  let orderedProducts=await userHelpers.getOrderedProducts(req.params._id)
+  console.log(orderedProducts);
+  res.render("users/ordered-products",{orderedProducts})
 })
-router.post('/remove-product',(req,res,next)=>{
-  userHelpers.removeProduct(req.body).then((response)=>{
-    res.json(response)
-  })
-})
-router.get('/checkout',(req,res)=>{
-  userHelpers.getTotalPrice(req.session.user._id).then((total)=>{
-    res.render('users/checkout',{total})
-  })
 
-})
 module.exports = router;

@@ -1,13 +1,13 @@
-
-
-<div class="col md-4">
+ <form class="form-horizontal" action="/checkout" id="checkout-form" method="POST">
+ <div class="col md-4">
     <div class="container mt-5 ml-5 checkout">
+      
         <h4 style="color:darkorchid;"><b>Total Amount =<i>  ₹ {{total}} </i></b></h4>
         <hr>
         <div class="payment">
             <p>Payment method</p>
             <label for="" class="radio-inline">
-            <input type="radio" name="payment-method" value="Online" checked> COD</label>
+            <input type="radio" name="payment-method" value="COD" checked> COD</label>
             <br><br>
             <label for="" class="radio-inline">
             <input type="radio" name="payment-method" value="Online"> Online payment</label>
@@ -17,7 +17,7 @@
 </div>
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
-      <form class="form-horizontal" role="form">
+     
         <fieldset>
 
           <!-- Form Name -->
@@ -27,7 +27,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="textinput" >Line 1 </label>
             <div class="col-sm-10">
-              <input type="text" placeholder="Address Line 1" class="form-control" required>
+              <input type="text" placeholder="Address Line 1" class="form-control" name="addressLine1" required>
             </div>
           </div>
 
@@ -35,7 +35,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="textinput">Line 2</label>
             <div class="col-sm-10">
-              <input type="text" placeholder="Address Line 2" class="form-control" required >
+              <input type="text" placeholder="Address Line 2" class="form-control" name="addressLine2" required >
             </div>
           </div>
 
@@ -43,7 +43,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="textinput">City</label>
             <div class="col-sm-10">
-              <input type="text" placeholder="City" class="form-control" required>
+              <input type="text" placeholder="City" class="form-control" name="city" required>
             </div>
           </div>
 
@@ -52,7 +52,7 @@
 
             <label class="col-sm-2 control-label" for="textinput">Postcode</label>
             <div class="col-sm-4">
-              <input type="text" placeholder="Post Code" class="form-control" required>
+              <input type="text" placeholder="Post Code" class="form-control" name="pin" required>
             </div>
           </div>
 
@@ -62,7 +62,10 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="textinput">Mobile</label>
             <div class="col-sm-10">
-              <input type="text" placeholder="Mobile" class="form-control">
+              <input type="text" placeholder="Mobile" class="form-control" name="mobile">
+            </div>
+             <div class="col-sm-10">
+              <input type="text" placeholder="userId" class="form-control" name="userId" value="{{user._id}} " hidden>
             </div>
           </div>
 
@@ -82,3 +85,16 @@
 <button class="btn btn-primary ml-5" type="submit" style="padding-left:3em; padding-right:3em;">Checkout</button>
 </div>
  </form>
+ {{!-- <script>
+	$("#checkout-form").submit((e)=>{
+		$.ajax({
+        
+			url:'/checkout',
+			method:'post',
+			data:$('#checkout-form').serialize(),
+				success(response)=>{
+					alert(response)
+				}
+			})
+		})
+</script> --}}

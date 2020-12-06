@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="main-heading">Shopping Cart</div>
+            <div class="table-cart">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Address</th>
+                            <th>Pincode</th>
+                            <th>Mobile</th>
+                            <th>Amount</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    {{#each orderDetials}}
+                    <tbody>
+                        <tr>
+                            <td style="padding-right: 40px;">
+                                {{this.date}}
+                            </td>
+                            <td style="padding-right: 40px;">
+                                {{this.deliveryDetials.address_line1}}
+                            </td>
+
+                            <td style="padding-right: 40px;">
+                                {{this.deliveryDetials.pincode}}
+                            </td>
+
+                            <td style="padding-right: 40px;">
+                                {{this.deliveryDetials.mobile}}
+                            </td>
+
+                            <td style="padding-right: 40px;">
+                            <b>₹ {{this.totalAmount}}</b> 
+                            </td>
+                            <td style="padding-right: 40px;">
+                                {{this.paymentMethod}}
+                            </td>
+
+                            <td style="padding-right: 40px;">
+                                  {{this.status}}
+                            </td>
+                            <td>
+                                <a href="/view-ordered-products/{{this._id}}" class="btn btn-primary">View Products</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    {{/each}}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div>
+
+
+</div>

@@ -35,7 +35,6 @@
 								<button class="btn btn-danger btn-sm cart-items-count mr-3"
 									onclick="changeProductQuantity('{{this._id}}','{{this.products._id}}','{{../userId}}',-1)">-</button>
 								<span id="{{this.products._id}}">{{this.quantity}}</span>
-								
 								<button class="btn btn-success btn-sm cart-items-count ml-3"
 									onclick="changeProductQuantity('{{this._id}}','{{this.products._id}}','{{../userId}}',1)">+</button>
                                 
@@ -99,6 +98,7 @@
 	<!-- /.cart-totals -->
 </div>
 
+
 <script>
 	function changeProductQuantity(cartId,proId,userId,count) {
 		let quantity = parseInt(document.getElementById(proId).innerHTML)
@@ -114,7 +114,7 @@
 			method: 'post',
 			success: (response) => {
 				if (response.removeProduct) {
-					alert("The product is removed from the cart")
+					alert("Tap the romove button to remove product from the cart")
 					location.reload()
 				}
 				else {
