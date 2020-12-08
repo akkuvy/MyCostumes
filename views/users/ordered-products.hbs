@@ -8,19 +8,14 @@
                 
                 <div class="product-image">
                     <a href="/view-product/{{this._id}}">
-                        <img  class="pic-1" style="height: 35em; width:25em; " src="/product-images/{{this._id}}.jpeg">
+                        <img  class="pic-1" style="height: 25em; width:15em; " src="/product-images/{{this.products._id}}.jpeg">
                     </a>
-                    <ul class="social">
-                        <li><a href="/view-product/{{this._id}}" data-tip="Quick View"><i class="fa fa-search"></i></a></li>
-                        <li><a href="" data-tip="Add to Wishlist"><i class="fa fa-shopping-bag"></i></a></li>
-                        <li><a  data-tip="Add to Cart" onclick="addtoCart('{{this._id}}')"><i class="fa fa-shopping-cart"></i></a></li>
-                    </ul>
-                    <span class="product-new-label">Sale</span>
-                    <span class="product-discount-label">{{this.OFF}}</span>
+                   
                 </div>
-                <div class="product-content">
-                    <h3 class="title"><a href="#">{{this.name}}</a></h3>
-                    <div class="price"> ₹{{this.price}}
+                <div class="">
+                    <h5 class=""><a href="#">{{this.products.name}}</a></h5>
+                    <div class="pric"> ₹{{this.products.price}}
+                        <p> Quantity = {{this.quantity}}</p>
                         
                     </div>
                 </div>

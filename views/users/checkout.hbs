@@ -1,4 +1,4 @@
- <form class="form-horizontal" action="/checkout" id="checkout-form" method="POST">
+ <form class="form-horizontal" action="" id="checkoutform" >
  <div class="col md-4">
     <div class="container mt-5 ml-5 checkout">
       
@@ -85,16 +85,19 @@
 <button class="btn btn-primary ml-5" type="submit" style="padding-left:3em; padding-right:3em;">Checkout</button>
 </div>
  </form>
- {{!-- <script>
-	$("#checkout-form").submit((e)=>{
+ <script>
+	$("#checkoutform").submit((e)=>{
+    e.preventDefault()
 		$.ajax({
         
 			url:'/checkout',
 			method:'post',
-			data:$('#checkout-form').serialize(),
-				success(response)=>{
-					alert(response)
+			data:$('#checkoutform').serialize(),
+				success:(response)=>{
+          if (response.status){
+	       location.href='/order-success'
+      }
 				}
 			})
 		})
-</script> --}}
+</script>
