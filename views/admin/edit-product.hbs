@@ -1,25 +1,35 @@
 <div class="container">
     <form action="" method="POST">
-        <div class="form-group">
+        <div class="form-group ml-5">
             <label for="exampleInputEmail1">Name</label>
             <input type="text" class="form-control" id="exampleInputEmail1" name="name" value="{{products.name}}" aria-describedby="emailHelp"  placeholder="">
 
         </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Category</label>
-            <input type="text" class="form-control" id="exampleInputPassword1" name="category" value="{{products.category}}" placeholder="">
+        <div class="form-group ml-2">
+            <label for="exampleInputcategory">Category</label>
+             <select  id="category" >
+                        <option value="{{products.Category}}">{{products.Category}}</option>
+                        <option value="Mens">Mens</option>
+                        <option value="Womens">Womens</option>
+                        <option value="Kids"> Kids</option>
+                      
+                    </select>
         </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">description</label>
+        <div class="form-group mr-5">
+            <label for="exampleInputPassword1">Description</label>
             <input type="text" class="form-control" id="exampleInputPassword1" name="description" value="{{products.description}}" placeholder="">
         </div>
-        <div class="form-group">
+        <div class="form-group ml-5">
             <label for="exampleInputPassword1">Price</label>
             <input type="text" class="form-control" id="exampleInputPassword1" name="price" value="{{products.price}}"placeholder="">
         </div>
-        <div class="form-group">
+        <div class="form-group ml-5">
             <label for="exampleInputPassword1">Off</label>
             <input type="text" class="form-control" id="exampleInputPassword1" name="off" value="{{products.OFF}}"placeholder="">
+        </div>
+        <div class="form-group ml-5">
+            <label for="exampleInputPassword1">Offer Price</label>
+            <input type="text" class="form-control"  id="exampleInputPassword1" name="offerPrice" value="{{products.offerPrice}}"placeholder="">
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>

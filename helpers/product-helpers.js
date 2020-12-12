@@ -6,7 +6,7 @@ const objectID = require("mongodb").ObjectID;
 
 module.exports = {
   addProduct: (product, callback) => {
-    product.price=parseInt(product.price)
+    product.price = parseInt(product.price);
     db.get()
       .collection("product")
       .insertOne(product)
@@ -39,26 +39,57 @@ module.exports = {
 
       resolve(products);
 
-      console.log(error); 
+      console.log(error);
     });
   },
   editProducts: (proId, proDet) => {
     return new Promise((resolve, reject) => {
-     products= db.get().collection(collection.PRODUCT_COLLECTION).updateOne(
-        { _id: objectID(proId) },
+      products = db
+        .get()
+        .collection(collection.PRODUCT_COLLECTION)
+        .updateOne(
+          { _id: objectID(proId) },
+          {
+            $set: {
+              name: proDet.name,
+              category: proDet.category,
+              description: proDet.description,
+              price: proDet.price,
+              OFF: proDet.off,
+            },
+          }
+        )
+        .then((response) => {
+          resolve(products);
+        });
+    });
+  },
+  getAllOrders() {
+    return new Promise(async (resolve, reject) => {
+      await db
+        .get()
+        .collection(collection.ORDER_COLLECTION)
+        .find()
+        .toArray()
+        .then((response) => {
+          resolve(response);
+        });
+    });
+  },
+  changeOrderStatus(orderDetials) {
+    return new Promise((resolve, reject) => {
+     
+      db
+        .get()
+        .collection(collection.ORDER_COLLECTION)
+        .updateOne({ _id: objectID(orderDetials.orderId )},
         {
           $set: {
-            name: proDet.name,
-            category:proDet.category,
-            description: proDet.description,
-            price: proDet.price,
-            OFF: proDet.off,
+            status: orderDetials.status
           },
-        }
-      )
-      .then((response)=>{
-        resolve(products)
-      })
+        }).then((response)=>{
+          resolve(response)
+        })
     });
   },
 };

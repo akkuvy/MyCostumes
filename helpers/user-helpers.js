@@ -7,15 +7,16 @@ const { use } = require("../routes/admin");
 const { CART_COLLECTION } = require("../config/collection");
 const { ObjectId } = require("mongodb");
 const Razorpay = require("razorpay");
+const { resolve } = require("path");
+const { promises } = require("fs");
 var instance = new Razorpay({
-  key_id: "rzp_test_me4naLfWGub7ha",
-  key_secret: "x8UnQ1nyjjbADmopMQiyehZZ",
+  key_id: "rzp_test_YW0yxpLz6IcM7R",
+  key_secret: "8pD1YYwbn6vkbig5TCyFaV1a",
 });
 module.exports = {
   signUp: (userData) => {
     return new Promise(async (resolve, reject) => {
       userData.password = await bcrypt.hash(userData.password, 10);
-      console.log(userData.password);
       db.get()
         .collection(collection.USER_COLLECTION)
         .insertOne(userData)
@@ -26,7 +27,6 @@ module.exports = {
   },
   logIn: (userData) => {
     return new Promise(async (resolve, reject) => {
-      console.log(userData);
       let loginStatus = false;
       let response = {};
       db.get()
@@ -80,7 +80,6 @@ module.exports = {
           .collection(collection.CART_COLLECTION)
           .insertOne(cartObj)
           .then((response) => {
-            console.log(response);
             resolve();
           });
       } else {
@@ -259,7 +258,7 @@ module.exports = {
   },
   placeOrder(order, products, total, userId) {
     return new Promise((resolve, reject) => {
-      let status = order["payment-method"] === "COD" ? "placed" : "pending";
+      let status = order.paymentMethod === "COD" ? "placed" : "pending";
       let orderObj = {
         user: userId,
         deliveryDetials: {
@@ -270,7 +269,7 @@ module.exports = {
           pincode: order.pin,
         },
 
-        paymentMethod: order["payment-method"],
+        paymentMethod: order.paymentMethod,
         totalAmount: total,
         products: products,
         status: status,
@@ -340,17 +339,55 @@ module.exports = {
       resolve(OrderedProducts);
     });
   },
-  generateRazorpay(orderId,total){
-    return new Promise((resolve,reject)=>{
+  generateRazorpay(orderId, total) {
+    return new Promise((resolve, reject) => {
       var options = {
-        amount: total,  
+        amount: total * 100,
         currency: "INR",
-        receipt: "order"+orderId
+        receipt: "" + orderId,
       };
-      instance.orders.create(options, function(err, order) {
-        console.log(""+order);
-        resolve(order)
+      instance.orders.create(options, function (err, order) {
+        resolve(order);
       });
-    })
-  }
+    });
+  },
+  verifyPayment: (details) => {
+    return new Promise((resolve, reject)  => {
+      const crypto = require("crypto");
+      let hmac = crypto.createHmac("sha256", "8pD1YYwbn6vkbig5TCyFaV1a");
+
+      hmac.update(
+        details["payment[razorpay_order_id]"] +
+          "|" +
+          details["payment[razorpay_payment_id]"]
+      );
+      hmac = hmac.digest("hex");
+      if (hmac == details["payment[razorpay_signature]"]) {
+        resolve();
+      } else {
+        reject();
+      }
+    });
+  },
+  changeOrderStatus(orderId) {
+    console.log(orderId);
+
+    return new Promise((resolve, reject) =>
+      db
+        .get()
+        .collection(collection.ORDER_COLLECTION)
+        .updateOne(
+          { _id: objectId(orderId) },
+          {
+            $set: {
+              status: "placed",
+            },
+          }
+        )
+        .then(() => {
+          resolve();
+        })
+    );
+  },
+  
 };
