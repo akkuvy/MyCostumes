@@ -20,9 +20,15 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link">All users</a>
                     </li>
+                    {{#if Admin}}
                       <li class="nav-item">
-                        <a href="/admin/login" class="nav-link">Login</a>
+                        <a href="/admin/logout" class="nav-link">Logout</a>
                     </li>
+                    {{else}}
+                    <li class="nav-item">
+                        <a href="/admin/login" class="nav-link">login</a>
+                    </li>
+                    {{/if}}
                     <li class="ml-5">
                           <div class="col-auto">
                                         

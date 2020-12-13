@@ -6,22 +6,16 @@
 
         </div>
         <div class="form-group ml-2">
-            <label for="exampleInputcategory">Category</label>
-             <select  id="category" >
-                        <option value="{{products.Category}}">{{products.Category}}</option>
-                        <option value="Mens">Mens</option>
-                        <option value="Womens">Womens</option>
-                        <option value="Kids"> Kids</option>
-                      
-                    </select>
+            <label for="exampleInputPassword1">Category</label>
+            <input type="text" class="form-control" id="exampleInputPassword1" name="" value="{{products.Category}}" placeholder="">
         </div>
         <div class="form-group mr-5">
             <label for="exampleInputPassword1">Description</label>
             <input type="text" class="form-control" id="exampleInputPassword1" name="description" value="{{products.description}}" placeholder="">
         </div>
         <div class="form-group ml-5">
-            <label for="exampleInputPassword1">Price</label>
-            <input type="text" class="form-control" id="exampleInputPassword1" name="price" value="{{products.price}}"placeholder="">
+            <label for="exampleInputPassword1">Actual Price</label>
+            <input type="text" class="form-control" id="exampleInputPassword1" name="price" value="{{products.actualPrice}}"placeholder="">
         </div>
         <div class="form-group ml-5">
             <label for="exampleInputPassword1">Off</label>
@@ -29,7 +23,7 @@
         </div>
         <div class="form-group ml-5">
             <label for="exampleInputPassword1">Offer Price</label>
-            <input type="text" class="form-control"  id="exampleInputPassword1" name="offerPrice" value="{{products.offerPrice}}"placeholder="">
+            <input type="text" class="form-control"  id="exampleInputPassword1" name="offerPrice" value="{{products.price}}"placeholder="" readonly>
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>

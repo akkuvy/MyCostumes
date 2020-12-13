@@ -1,18 +1,19 @@
 
 <section>
     
-    <nav class="navbar navbar-expand-lg ml-5">
+    <nav class="navbar navbar-expand-lg nav-bar default ml-5">
+        <div class="container-fluid">
 
         <ul class="navbar-nav mr-auto">
             <li class="active">
                 <a href="/" class="nav-link">MyCostumes</a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">About</a>
+                <a href="/category" class="nav-link">Categories</a>
             </li>
-
+          
             <li class="nav-item">
-                <a href="order" class="nav-link">My Orders</a>
+                <a href="/order" class="nav-link">My Orders</a>
             </li>
             <li class="nav-item">
                 <a href="/cart" class="nav-link">Cart <span  class="badge badge-dark" id="cart-count">{{cartCount}}</span></a>
@@ -20,10 +21,15 @@
 
             <li class="nav-item">
                 <a href="#" class="nav-link">Contact</a>
+                
             </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">About</a>
+            </li>
+
              {{#if user}}
           <li class="nav-item">
-            <a class="nav-link"  href="/logout">Logout  ({{user.username}})</a>
+            <a class="nav-link"  href="/logout">Logout </a>
             
           </li>
           {{else}}
@@ -31,21 +37,13 @@
             <a class="nav-link"  href="/login">login</a>
           </li>
           {{/if}}
-           <li class="ml-5 mt-3">
-                          <div class="col-auto">
-                                        
-                                    </div>
-                                    <!--end of col-->
-                                    <div class="col">
-                                        <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search products">
-                                    </div>
-                                    <!--end of col-->
-                                    <div class="col-auto">
-                                       
-                                    </div>
-                    </li>
+        <li class="nav-item" style="margin-left:70%;">
+            <a class="nav-link"  href="/profile"><i class="fa fa-user" aria-hidden="true"></i>{{user.username}}
+</a>
+          </li>
          
         </ul>
         </div>
     </nav>
+    </div>
 </section>

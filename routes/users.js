@@ -6,7 +6,7 @@ const userHelpers = require("../helpers/user-helpers");
 var router = express.Router();
 
 checkLoggedin = (req, res, next) => {
-  if (!req.session.user.loggedIn) {
+  if (!req.session.user) {
     res.redirect("/login");
   } else {
     next();
@@ -79,9 +79,6 @@ router.get("/cart", checkLoggedin, async (req, res) => {
   let cartCount = null;
 
   cartCount = await userHelpers.getCartCount(req.session.user._id);
-  if(cartCount==0){
-    cartCount=null
-  }
 
   let products = await userHelpers.getCartProducts(req.session.user._id);
   let total = 0;
@@ -89,7 +86,7 @@ router.get("/cart", checkLoggedin, async (req, res) => {
     total = await userHelpers.getTotalPrice(req.session.user._id);
   }
 
-  res.render("users/cart", { products, user, total, userId,cartCount });
+  res.render("users/cart", { products, user, total, userId, cartCount });
 });
 router.post("/change-product-quantity", (req, res, next) => {
   userHelpers.changeProductQuantity(req.body).then(async (response) => {
@@ -153,5 +150,63 @@ router.post("/verify-payment", async (req, res) => {
       });
   });
 });
+router.get("/mens-only", async (req, res) => {
+  let user = req.session.user;
+  let cartCount = null;
+  if (user) {
+    let id = req.session.user._id;
+    cartCount = await userHelpers.getCartCount(req.session.user._id);
+  }
+  await userHelpers.mensOnly().then((products) => {
+    res.render("users/index", { products, user, cartCount });
+  });
+});
+router.get("/womens-only", async (req, res) => {
+  let user = req.session.user;
+  let cartCount = null;
+  if (user) {
+    let id = req.session.user._id;
+    cartCount = await userHelpers.getCartCount(req.session.user._id);
+  }
+  await userHelpers.womensOnly().then((products) => {
+    res.render("users/index", { products, user, cartCount });
+  });
+});
+router.get("/kids-only", async (req, res) => {
+  let user = req.session.user;
+  let cartCount = null;
+  if (user) {
+    let id = req.session.user._id;
+    cartCount = await userHelpers.getCartCount(req.session.user._id);
+  }
+  await userHelpers.kidsOnly().then((products) => {
+    res.render("users/index", { products, user, cartCount });
+  });
+});
+router.get("/profile", checkLoggedin, async (req, res) => {
+  let profile = await userHelpers
+    .getProfile(req.session.user._id)
+    .then((profile) => {
+      res.render("users/profile", { profile });
+    });
+});
+router.post("/profile",async(req,res)=>{
+  await userHelpers.updateProfile(req.session.user._id,req.body).then((response)=>{
+   res.redirect('/profile')
+  })
+
+})
+router.get("/manage-address",async(req,res)=>{
+  let address=await userHelpers.getAddress(req.session.user._id).then((address)=>{
+    console.log(address);
+    res.render("users/address",{address})
+  })
+ 
+})
+router.post("/manage-address",(req,res)=>{
+ userHelpers.manageAddress(req.session.user._id,req.body)
+ res.redirect('/manage-address')
+})
+
 
 module.exports = router;

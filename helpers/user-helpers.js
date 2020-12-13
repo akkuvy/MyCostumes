@@ -9,6 +9,7 @@ const { ObjectId } = require("mongodb");
 const Razorpay = require("razorpay");
 const { resolve } = require("path");
 const { promises } = require("fs");
+const { cpuUsage } = require("process");
 var instance = new Razorpay({
   key_id: "rzp_test_YW0yxpLz6IcM7R",
   key_secret: "8pD1YYwbn6vkbig5TCyFaV1a",
@@ -352,7 +353,7 @@ module.exports = {
     });
   },
   verifyPayment: (details) => {
-    return new Promise((resolve, reject)  => {
+    return new Promise((resolve, reject) => {
       const crypto = require("crypto");
       let hmac = crypto.createHmac("sha256", "8pD1YYwbn6vkbig5TCyFaV1a");
 
@@ -389,5 +390,91 @@ module.exports = {
         })
     );
   },
-  
+  mensOnly() {
+    return new Promise(async (resolve, reject) => {
+      let products = await db
+        .get()
+        .collection(collection.PRODUCT_COLLECTION)
+        .find({ Category: "Mens" })
+        .toArray();
+      resolve(products);
+    });
+  },
+  womensOnly() {
+    return new Promise(async (resolve, reject) => {
+      let products = await db
+        .get()
+        .collection(collection.PRODUCT_COLLECTION)
+        .find({ Category: "Womens" })
+        .toArray();
+      resolve(products);
+    });
+  },
+  kidsOnly() {
+    return new Promise(async (resolve, reject) => {
+      let products = await db
+        .get()
+        .collection(collection.PRODUCT_COLLECTION)
+        .find({ Category: "Kids" })
+        .toArray();
+      resolve(products);
+    });
+  },
+  getProfile(userId) {
+    console.log(userId);
+    return new Promise(async (resolve, reject) => {
+      let profile = await db
+        .get()
+        .collection(collection.USER_COLLECTION)
+        .findOne({ _id: objectId(userId) });
+      resolve(profile);
+    });
+  },
+  updateProfile(userId, userData) {
+    return new Promise((resolve, reject) => {
+      db.get()
+        .collection(collection.USER_COLLECTION)
+        .updateOne(
+          { _id: objectId(userId) },
+          {
+            $set: {
+              username: userData.username,
+              mobile: userData.mobile,
+              email: userData.email,
+            },
+          }
+        )
+        .then(() => {
+          resolve();
+        });
+    });
+  },
+  manageAddress(userId, address) {
+    return new Promise((resolve, reject) => {
+      db.get()
+        .collection(collection.ADDRESS_COLLECTION)
+        .updateOne(
+          { user: userId },
+          {
+            $set: {
+              user: objectId(userId),
+              addressLine1: address.addressLine1,
+              addressLine2: address.addressLine2,
+              city: address.city,
+              pin: address.pin,
+            },
+          },
+          { upsert: true }
+        );
+    }).then(() => {
+      resolve();
+    });
+  },
+  getAddress(userId){
+    console.log(userId);
+    return new Promise((resolve,reject)=>{
+      let address=db.get().collection(collection.ADDRESS_COLLECTION).findOne({user:objectId(userId)})
+      resolve(address)
+    })
+  }
 };
