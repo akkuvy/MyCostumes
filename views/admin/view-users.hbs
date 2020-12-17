@@ -1,0 +1,31 @@
+<div class="container">
+
+    <h1> <b>All Users</b> </h1>
+
+    <table class="zui-table center mt-5 ">
+
+        <thead>
+
+            <tr>
+                <th>UserId</th>
+                <th>UserName</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th></th>
+                
+            </tr>
+
+        </thead>
+        <tbody>
+            {{#each users}}
+            <tr>
+                <td>{{this._id}}</td>
+                <td>{{this.username}}</td>
+                <td>{{this.email}},{{this.deliveryDetials.address_line2}}</td>
+                <td>{{this.mobile}}</td>
+                <td><a class="btn btn-danger" href="/admin/remove-user/{{this._id}}">Remove</a></td>
+                
+          {{/each}}
+        </tbody>
+    </table>
+</div>

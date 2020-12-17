@@ -20,7 +20,7 @@
                     <h4 class="product-description">{{products.description}}</h4>
                     <h4 class="price">current price: <span>₹{{products.price}}</span></h4>
                     <div class="action">
-                        <a class="btn btn-success" href="/addto-cart/{{products._id}}">ADD TO CART</a>
+                        <a class="btn btn-success" onclick="addtoCart('{{products._id}}')">ADD TO CART</a>
                         <button class="like btn btn-default ml-5  mt-5" type="button"><span class="fa fa-heart"></span></button>
                     </div>
                 </div>
@@ -29,3 +29,23 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    function addtoCart(proId) {
+  $.ajax({
+    url: "/addto-cart/" + proId,
+    method: "get",
+    success: (response) => {
+      let count = $("#cart-count").html();
+      if (response.status) {
+        count = parseInt(count) + 1;
+        $("#cart-count").html(count);
+
+        alert("Item added successfully");
+      }
+    },
+  });
+}
+
+</script>

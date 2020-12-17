@@ -30,11 +30,11 @@ router.get("/add-product",checkAdmin, (req, res) => {
 router.post("/add-product", (req, res) => {
   console.log(req.body);
   productHelpers.addProduct(req.body, (id) => {
-    console.log(req.files.Image);
-    let image = req.files.Image;
+    console.log(req.files.image);
+    let image = req.files.image;
     image.mv("./public/product-images/" + id + ".jpeg", (err) => {
       if (!err) {
-        res.render("admin/add-product");
+        res.render("admin/add-product",{admin:true});
       } else {
         console.log("error", err);
       }
@@ -56,10 +56,19 @@ router.get("/edit-products/:id", (req, res) => {
 router.post("/edit-products/:id", (req, res) => {
   id = req.params.id;
   console.log(req.body);
-  productHelpers.editProducts(id, req.body).then((response) => {
-    res.redirect("/admin");
+  productHelpers.editProducts(id, req.body).then(()=>{
+   res.redirect('/admin')
+   if(req.files.image){
+    let image=req.files.image
+    image.mv("./public/product-images/" + id + ".jpeg")
+  }
+  })
+    
+    
+   
   });
-});
+  
+
 router.get("/all-orderes",checkAdmin, async (req, res) => {
   let orders = await productHelpers.getAllOrders();
   res.render("admin/view-orders", { orders, admin: true });
@@ -86,6 +95,18 @@ router.post("/login", (req, res) => {
 router.get('/logout',(req,res)=>{
   req.session.admin=null;
   res.redirect('/admin')
+}),
+router.get("/all-users" ,checkAdmin,async(req,res)=>{
+  users=await adminHelpers.getUsers()
+ res.render('admin/view-users',{users,admin:true})
 })
+router.get("/remove-user/:id",async(req,res)=>{
+  id=req.params.id
+  await adminHelpers.removeUser(id).then(()=>{
+    res.redirect('/admin/all-users')
+  })
+}
+
+)
 
 module.exports = router;

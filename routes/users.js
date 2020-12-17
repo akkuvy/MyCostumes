@@ -4,6 +4,7 @@ const { response } = require("../app");
 const productHelpers = require("../helpers/product-helpers");
 const userHelpers = require("../helpers/user-helpers");
 var router = express.Router();
+var passport = require("passport");
 
 checkLoggedin = (req, res, next) => {
   if (!req.session.user) {
@@ -47,6 +48,7 @@ router.post("/login", (req, res) => {
 });
 router.get("/logout", (req, res) => {
   req.session.user = null;
+  req.logout();
   res.redirect("/");
 });
 router.get("/register", (req, res) => {
@@ -59,11 +61,12 @@ router.post("/register", (req, res) => {
     res.redirect("/login");
   });
 });
-router.get("/view-product/:id", (req, res) => {
+router.get("/view-product/:id", checkLoggedin, async (req, res) => {
   let user = req.session.user;
-  id = req.params.id;
+  let id = req.params.id;
+  let cartCount = await userHelpers.getCartCount(req.session.user._id);
   products = userHelpers.viewProducts(id).then((products) => {
-    res.render("users/view-product", { products, id, user });
+    res.render("users/view-product", { products, id, user, cartCount });
   });
 });
 router.get("/addto-cart/:id", (req, res) => {
@@ -99,10 +102,12 @@ router.post("/remove-product", (req, res, next) => {
     res.json(response);
   });
 });
-router.get("/checkout", (req, res) => {
+router.get("/checkout", async (req, res) => {
   user = req.session.user;
+  address = await userHelpers.getAddress(user._id);
+  console.log(address);
   userHelpers.getTotalPrice(req.session.user._id).then((total) => {
-    res.render("users/checkout", { user, total });
+    res.render("users/checkout", { user, total, address });
   });
 });
 router.post("/checkout", async (req, res) => {
@@ -190,23 +195,50 @@ router.get("/profile", checkLoggedin, async (req, res) => {
       res.render("users/profile", { profile });
     });
 });
-router.post("/profile",async(req,res)=>{
-  await userHelpers.updateProfile(req.session.user._id,req.body).then((response)=>{
-   res.redirect('/profile')
-  })
+router.post("/profile", async (req, res) => {
+  await userHelpers
+    .updateProfile(req.session.user._id, req.body)
+    .then((response) => {
+      res.redirect("/profile");
+    });
+});
+router.get("/manage-address", async (req, res) => {
+  let address = await userHelpers
+    .getAddress(req.session.user._id)
+    .then((address) => {
+      console.log(address);
+      res.render("users/address", { address });
+    });
+});
+router.post("/manage-address", (req, res) => {
+  userHelpers.manageAddress(req.session.user._id, req.body);
+  res.redirect("/manage-address");
+});
+router.get("/failed", (req, res) => res.send("You Failed to log in!"));
 
-})
-router.get("/manage-address",async(req,res)=>{
-  let address=await userHelpers.getAddress(req.session.user._id).then((address)=>{
-    console.log(address);
-    res.render("users/address",{address})
-  })
- 
-})
-router.post("/manage-address",(req,res)=>{
- userHelpers.manageAddress(req.session.user._id,req.body)
- res.redirect('/manage-address')
-})
+router.get("/good", (req, res) => {
+  console.log(req.user);
+  res.render("users/index", { name: req.user });
+});
 
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { failureRedirect: "/failed" }),
+  function (req, res) {
+    console.log(req.user);
+    res.redirect("/good");
+  }
+);
+
+router.get("/logout", (req, res) => {
+  req.session = null;
+  req.logout();
+  res.redirect("/");
+});
 
 module.exports = router;

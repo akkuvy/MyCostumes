@@ -10,10 +10,39 @@ const Razorpay = require("razorpay");
 const { resolve } = require("path");
 const { promises } = require("fs");
 const { cpuUsage } = require("process");
+const passport = require("passport");
+
+const GoogleStrategy = require("passport-google-oauth2").Strategy;
+
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID:
+        "1080061621503-hq32sn74i129vg3ipil342f7qhpujdba.apps.googleusercontent.com",
+      clientSecret: "75YYOqBnbVB_IpNC1prBJmlL",
+      callbackURL: "http://localhost:4001/google/callback",
+      passReqToCallback: true,
+    },
+    function (request, accessToken, refreshToken, profile, done) {
+      console.log(profile);
+
+      return done(null, profile);
+    }
+  )
+);
 var instance = new Razorpay({
   key_id: "rzp_test_YW0yxpLz6IcM7R",
   key_secret: "8pD1YYwbn6vkbig5TCyFaV1a",
 });
+
 module.exports = {
   signUp: (userData) => {
     return new Promise(async (resolve, reject) => {
@@ -453,28 +482,38 @@ module.exports = {
     return new Promise((resolve, reject) => {
       db.get()
         .collection(collection.ADDRESS_COLLECTION)
-        .updateOne(
-          { user: userId },
-          {
-            $set: {
-              user: objectId(userId),
-              addressLine1: address.addressLine1,
-              addressLine2: address.addressLine2,
-              city: address.city,
-              pin: address.pin,
-            },
-          },
-          { upsert: true }
-        );
-    }).then(() => {
-      resolve();
+        .removeOne({ user: objectId(userId) })
+        .then(() => {
+          db.get()
+            .collection(collection.ADDRESS_COLLECTION)
+            .updateOne(
+              { user: userId },
+              {
+                $set: {
+                  user: objectId(userId),
+                  mobile: address.mobile,
+                  addressLine1: address.addressLine1,
+                  addressLine2: address.addressLine2,
+                  city: address.city,
+                  pin: address.pin,
+                },
+              },
+              { upsert: true }
+            );
+        })
+        .then(() => {
+          resolve();
+        });
     });
   },
-  getAddress(userId){
+  getAddress(userId) {
     console.log(userId);
-    return new Promise((resolve,reject)=>{
-      let address=db.get().collection(collection.ADDRESS_COLLECTION).findOne({user:objectId(userId)})
-      resolve(address)
-    })
-  }
+    return new Promise((resolve, reject) => {
+      let address = db
+        .get()
+        .collection(collection.ADDRESS_COLLECTION)
+        .findOne({ user: objectId(userId) });
+      resolve(address);
+    });
+  },
 };

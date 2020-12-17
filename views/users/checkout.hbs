@@ -1,3 +1,4 @@
+<div class="container">
  <form class="form-horizontal" action="" id="checkoutform" >
  <div class="col md-4">
     <div class="container mt-5 ml-5 checkout">
@@ -25,9 +26,9 @@
 
           <!-- Text input-->
           <div class="form-group">
-            <label class="col-sm-2 control-label" for="textinput" >Line 1 </label>
+            <label class="col-sm-2 control-label" for="textinput"  >Line 1 </label>
             <div class="col-sm-10">
-              <input type="text" placeholder="Address Line 1" class="form-control" name="addressLine1" required>
+              <input type="text" placeholder="Address Line 1" class="form-control" name="addressLine1" value="{{address.addressLine1}}" required>
             </div>
           </div>
 
@@ -35,7 +36,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="textinput">Line 2</label>
             <div class="col-sm-10">
-              <input type="text" placeholder="Address Line 2" class="form-control" name="addressLine2" required >
+              <input type="text" placeholder="Address Line 2" class="form-control" name="addressLine2" value="{{address.addressLine2}}" required >
             </div>
           </div>
 
@@ -43,7 +44,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="textinput">City</label>
             <div class="col-sm-10">
-              <input type="text" placeholder="City" class="form-control" name="city" required>
+              <input type="text" placeholder="City" class="form-control" name="city" value="{{address.city}}" required>
             </div>
           </div>
 
@@ -52,7 +53,7 @@
 
             <label class="col-sm-2 control-label" for="textinput">Postcode</label>
             <div class="col-sm-4">
-              <input type="text" placeholder="Post Code" class="form-control" name="pin" required>
+              <input type="text" placeholder="Post Code" class="form-control" name="pin" value="{{address.pin}}" required>
             </div>
           </div>
 
@@ -60,9 +61,9 @@
 
           <!-- Text input-->
           <div class="form-group">
-            <label class="col-sm-2 control-label" for="textinput">Mobile</label>
+            <label class="col-sm-2 control-label" for="textinput" >Mobile</label>
             <div class="col-sm-10">
-              <input type="text" placeholder="Mobile" class="form-control" name="mobile">
+              <input type="text" placeholder="Mobile" class="form-control" name="mobile" value="{{address.mobile}}">
             </div>
              <div class="col-sm-10">
               <input type="text" placeholder="userId" class="form-control" name="userId" value="{{user._id}} " hidden>
@@ -85,6 +86,8 @@
 <button class="btn btn-primary ml-5" type="submit" style="padding-left:3em; padding-right:3em;">Checkout</button>
 </div>
  </form>
+</div>
+
  <script>
 	$("#checkoutform").submit((e)=>{
     e.preventDefault()

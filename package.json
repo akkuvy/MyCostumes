@@ -8,7 +8,9 @@
   "dependencies": {
     "alert": "^5.0.6",
     "bcrypt": "^5.0.0",
+    "cookie": "^0.4.1",
     "cookie-parser": "~1.4.4",
+    "cookie-session": "^1.4.0",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-fileupload": "^1.2.0",
@@ -19,6 +21,9 @@
     "mongodb": "^3.6.3",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.6",
-    "razorpay": "^2.0.6"
+    "passport": "^0.4.1",
+    "passport-google-oauth2": "^0.2.0",
+    "razorpay": "^2.0.6",
+    "session": "^0.1.0"
   }
 }

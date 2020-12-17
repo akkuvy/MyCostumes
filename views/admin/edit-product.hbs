@@ -1,5 +1,5 @@
 <div class="container">
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
         <div class="form-group ml-5">
             <label for="exampleInputEmail1">Name</label>
             <input type="text" class="form-control" id="exampleInputEmail1" name="name" value="{{products.name}}" aria-describedby="emailHelp"  placeholder="">
@@ -25,7 +25,17 @@
             <label for="exampleInputPassword1">Offer Price</label>
             <input type="text" class="form-control"  id="exampleInputPassword1" name="offerPrice" value="{{products.price}}"placeholder="" readonly>
         </div>
+         <div class="form-group">
+    <label for="exampleFormControlFile1">Image</label>
+    <img src="/product-images/{{products._id}}.jpeg "style="width: 150px; height:100px" id="viewImg"> 
+    <input type="file" class="form-control-file" id="exampleFormControlFile1" name="image" onchange="imgView(event)" >
+  </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
+<script>
+ function imgView(){
+    document.getElementById('viewImg').src=URL.createObjectURL(event.target.files[0])
+  }
+</script>

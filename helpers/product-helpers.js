@@ -46,6 +46,7 @@ module.exports = {
   },
   editProducts: (proId, proDet) => {
     return new Promise((resolve, reject) => {
+    
       products = db
         .get()
         .collection(collection.PRODUCT_COLLECTION)
@@ -56,8 +57,9 @@ module.exports = {
               name: proDet.name,
               category: proDet.category,
               description: proDet.description,
-              price: proDet.price,
+              actualPrice:proDet.price,
               OFF: proDet.off,
+              price:proDet.price-(proDet.price*(proDet.off/100))
             },
           }
         )
