@@ -37,6 +37,13 @@ module.exports = {
           await db.get().collection(collection.USER_COLLECTION).removeOne({_id:objectID(userId)})
           resolve()
       })
+  },
+  getFeedback(){
+    return new Promise(async(resolve,reject)=>{
+     let feedback= await db.get().collection(collection.FEEDBCK_COLLECTION).find().toArray()
+     resolve(feedback)
+      
+    })
   }
 };
 

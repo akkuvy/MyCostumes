@@ -62,6 +62,7 @@ module.exports = {
       db.get()
         .collection(collection.USER_COLLECTION)
         .findOne({ email: userData.email }, (err, user) => {
+          console.log(user);
           if (user) {
             bcrypt.compare(userData.password, user.password).then((status) => {
               if (status) {
@@ -514,6 +515,41 @@ module.exports = {
         .collection(collection.ADDRESS_COLLECTION)
         .findOne({ user: objectId(userId) });
       resolve(address);
+    });
+  },
+  addUsers(userDetials) {
+    return new Promise((resolve, reject) => {
+      let response = {};
+      let userData = {
+        username: userDetials.given_name,
+        email: userDetials.email,
+      };
+      db.get()
+        .collection(collection.USER_COLLECTION)
+        .remove({ email: userDetials.email })
+        .then(() => {
+          db.get().collection(collection.USER_COLLECTION).insertOne(userData);
+          response.user = userData;
+          resolve(response);
+        });
+    });
+  },
+  sendFeedback(details) {
+    return new Promise(async (resolve, reject) => {
+      console.log(details);
+      let feedback = {
+        name: details.name,
+        email: details.email,
+        mobile: details.mobile,
+        message: details.message,
+      };
+      await db
+        .get()
+        .collection(collection.FEEDBCK_COLLECTION)
+        .insertOne(feedback)
+        .then((response) => {
+          resolve(true);
+        });
     });
   },
 };

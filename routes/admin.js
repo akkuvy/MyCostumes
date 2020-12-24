@@ -6,25 +6,23 @@ const userHelpers = require("../helpers/user-helpers");
 const adminHelpers = require("../helpers/admin-helpers");
 const { Db } = require("mongodb");
 
-checkAdmin=(req,res,next)=>{
-  if (!req.session.admin){
-    res.redirect('/admin/login')
-  }else{
-    next()
+checkAdmin = (req, res, next) => {
+  if (!req.session.admin) {
+    res.redirect("/admin/login");
+  } else {
+    next();
   }
-}
+};
 
+router.get("/", checkAdmin, function (req, res, next) {
+  let Admin = req.session.admin;
 
-
-router.get("/", checkAdmin,function (req, res, next) {
-  let Admin=req.session.admin;
-  
   console.log(Admin);
   productHelpers.getAllProducts().then((products) => {
-    res.render("admin/view-products", { admin: true, products,Admin });
+    res.render("admin/view-products", { admin: true, products, Admin });
   });
 });
-router.get("/add-product",checkAdmin, (req, res) => {
+router.get("/add-product", checkAdmin, (req, res) => {
   res.render("admin/add-product", { admin: true });
 });
 router.post("/add-product", (req, res) => {
@@ -34,7 +32,7 @@ router.post("/add-product", (req, res) => {
     let image = req.files.image;
     image.mv("./public/product-images/" + id + ".jpeg", (err) => {
       if (!err) {
-        res.render("admin/add-product",{admin:true});
+        res.render("admin/add-product", { admin: true });
       } else {
         console.log("error", err);
       }
@@ -56,22 +54,19 @@ router.get("/edit-products/:id", (req, res) => {
 router.post("/edit-products/:id", (req, res) => {
   id = req.params.id;
   console.log(req.body);
-  productHelpers.editProducts(id, req.body).then(()=>{
-   res.redirect('/admin')
-   if(req.files.image){
-    let image=req.files.image
-    image.mv("./public/product-images/" + id + ".jpeg")
-  }
-  })
-    
-    
-   
+  productHelpers.editProducts(id, req.body).then(() => {
+    res.redirect("/admin");
+    if (req.files.image) {
+      let image = req.files.image;
+      image.mv("./public/product-images/" + id + ".jpeg");
+    }
   });
-  
+});
 
-router.get("/all-orderes",checkAdmin, async (req, res) => {
+router.get("/all-orderes", checkAdmin, async (req, res) => {
+  let Admin=req.session.admin;
   let orders = await productHelpers.getAllOrders();
-  res.render("admin/view-orders", { orders, admin: true });
+  res.render("admin/view-orders", { Admin,orders, admin: true });
 });
 router.post("/change-orderstatus", (req, res) => {
   productHelpers.changeOrderStatus(req.body).then((response) => {
@@ -79,7 +74,7 @@ router.post("/change-orderstatus", (req, res) => {
   });
 });
 router.get("/login", async (req, res) => {
-  res.render("admin/adminLogin",{admin:true})
+  res.render("admin/adminLogin", { admin: true });
 });
 router.post("/login", (req, res) => {
   adminHelpers.doLogin(req.body).then((response) => {
@@ -92,21 +87,26 @@ router.post("/login", (req, res) => {
     }
   });
 });
-router.get('/logout',(req,res)=>{
-  req.session.admin=null;
-  res.redirect('/admin')
+router.get("/logout", (req, res) => {
+  req.session.admin = null;
+  res.redirect("/admin");
 }),
-router.get("/all-users" ,checkAdmin,async(req,res)=>{
-  users=await adminHelpers.getUsers()
- res.render('admin/view-users',{users,admin:true})
-})
-router.get("/remove-user/:id",async(req,res)=>{
-  id=req.params.id
-  await adminHelpers.removeUser(id).then(()=>{
-    res.redirect('/admin/all-users')
-  })
-}
+  router.get("/all-users", checkAdmin, async (req, res) => {
+    let Admin=req.session.admin
+    users = await adminHelpers.getUsers();
+    res.render("admin/view-users", { Admin, users, admin: true });
+  });
+router.get("/remove-user/:id", async (req, res) => {
+  id = req.params.id;
+  await adminHelpers.removeUser(id).then(() => {
+    res.redirect("/admin/all-users");
+  });
+});
 
-)
+router.get("/feedback",async(req,res)=>{
+  let Admin=req.session.admin
+  let feedback= await adminHelpers.getFeedback()
+  res.render('admin/feedback',{Admin,feedback,admin:true})
+})
 
 module.exports = router;

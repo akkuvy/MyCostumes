@@ -13,6 +13,7 @@ var mongoClient=require('mongodb').mongoClient
 var session=require('express-session')
 const passport=require('passport')
 var cookieSession=require('cookie-session')
+const mongoStore=require("connect-mongo")(session)
 
 
 var app = express();
@@ -37,7 +38,11 @@ app.use(passport.session())
 
 app.use(cookieSession({
   name: 'session',
-  keys: ['key1', 'key2']
+  keys: ['key1', 'key2'],
+  resave:true,
+  saveUninitialized:true,
+  store:new mongoStore({url:"mongodb://localhost:27017/costumes"
+  }),
 }))
 db.connect((err)=>{
   if (err)

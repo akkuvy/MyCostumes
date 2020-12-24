@@ -5,6 +5,8 @@ const productHelpers = require("../helpers/product-helpers");
 const userHelpers = require("../helpers/user-helpers");
 var router = express.Router();
 var passport = require("passport");
+const adminHelpers = require("../helpers/admin-helpers");
+const { use } = require("passport");
 
 checkLoggedin = (req, res, next) => {
   if (!req.session.user) {
@@ -36,6 +38,7 @@ router.get("/login", (req, res) => {
 router.post("/login", (req, res) => {
   userHelpers.logIn(req.body).then((response) => {
     if (response.status) {
+      console.log(response);
       req.session.user = response.user;
       req.session.user.loggedIn = true;
 
@@ -46,16 +49,14 @@ router.post("/login", (req, res) => {
     }
   });
 });
-router.get("/logout", (req, res) => {
-  req.session.user = null;
-  req.logout();
-  res.redirect("/");
-});
+
 router.get("/register", (req, res) => {
   res.render("users/register");
 });
 router.post("/register", (req, res) => {
   userHelpers.signUp(req.body).then((response) => {
+    log("response");
+
     req.session.user = response;
     req.session.user.loggedIn = true;
     res.redirect("/login");
@@ -133,9 +134,10 @@ router.get("/order-success", async (req, res) => {
 });
 router.get("/order", checkLoggedin, async (req, res) => {
   user = req.session.user;
+  cartCount= await userHelpers.getCartCount(req.session.user._id)
   let orderDetials = await userHelpers.getOrderDetials(req.session.user._id);
   console.log(orderDetials);
-  res.render("users/orders", { orderDetials, user });
+  res.render("users/orders", { orderDetials, user ,cartCount});
 });
 router.get("/view-ordered-products/:id", async (req, res) => {
   user = req.session.user;
@@ -189,10 +191,12 @@ router.get("/kids-only", async (req, res) => {
   });
 });
 router.get("/profile", checkLoggedin, async (req, res) => {
+  user=req.session.user;
+  let cartCount=await userHelpers.getCartCount(req.session.user._id)
   let profile = await userHelpers
     .getProfile(req.session.user._id)
     .then((profile) => {
-      res.render("users/profile", { profile });
+      res.render("users/profile", { profile,user,cartCount });
     });
 });
 router.post("/profile", async (req, res) => {
@@ -203,11 +207,13 @@ router.post("/profile", async (req, res) => {
     });
 });
 router.get("/manage-address", async (req, res) => {
+  let cartCount=await userHelpers.getCartCount(req.session.user._id)
+  let user=req.session.user;
   let address = await userHelpers
     .getAddress(req.session.user._id)
     .then((address) => {
       console.log(address);
-      res.render("users/address", { address });
+      res.render("users/address", { address ,cartCount,user});
     });
 });
 router.post("/manage-address", (req, res) => {
@@ -215,11 +221,6 @@ router.post("/manage-address", (req, res) => {
   res.redirect("/manage-address");
 });
 router.get("/failed", (req, res) => res.send("You Failed to log in!"));
-
-router.get("/good", (req, res) => {
-  console.log(req.user);
-  res.render("users/index", { name: req.user });
-});
 
 router.get(
   "/google",
@@ -230,8 +231,11 @@ router.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/failed" }),
   function (req, res) {
-    console.log(req.user);
-    res.redirect("/good");
+    userHelpers.addUsers(req.user).then((response) => {
+      req.session.user = response.user;
+
+      res.redirect("/");
+    });
   }
 );
 
@@ -240,5 +244,14 @@ router.get("/logout", (req, res) => {
   req.logout();
   res.redirect("/");
 });
+router.get('/contact',(req,res)=>{
+  res.render('users/contactus')
+})
+router.post('/contact',async(req,res)=>{
+  await userHelpers.sendFeedback(req.body).then((response)=>{
+    res.json(response)
+  })
+  
+})
 
 module.exports = router;

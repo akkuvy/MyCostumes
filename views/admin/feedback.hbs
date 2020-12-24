@@ -1,0 +1,31 @@
+<div class="container">
+
+    <h1> <b>Feedbacks</b> </h1>
+
+    <table class="zui-table center mt-5 ">
+
+        <thead>
+
+            <tr>
+                <th>Name</th>
+                <th>email</th>
+                <th>Mobile</th>
+                <th>Message</th>
+                
+                
+            </tr>
+
+        </thead>
+        <tbody>
+            {{#each feedback}}
+            <tr>
+                <td>{{this.name}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.mobile}}</td>
+                <td>{{this.message}}</td>
+               
+                
+          {{/each}}
+        </tbody>
+    </table>
+</div>

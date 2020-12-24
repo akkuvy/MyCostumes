@@ -8,6 +8,7 @@
   "dependencies": {
     "alert": "^5.0.6",
     "bcrypt": "^5.0.0",
+    "connect-mongo": "^3.2.0",
     "cookie": "^0.4.1",
     "cookie-parser": "~1.4.4",
     "cookie-session": "^1.4.0",
