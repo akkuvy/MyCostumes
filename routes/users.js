@@ -55,7 +55,7 @@ router.get("/register", (req, res) => {
 });
 router.post("/register", (req, res) => {
   userHelpers.signUp(req.body).then((response) => {
-    log("response");
+   
 
     req.session.user = response;
     req.session.user.loggedIn = true;
