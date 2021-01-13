@@ -1,3 +1,5 @@
+
+
 h3.h3{text-align:center;margin:1em;text-transform:capitalize;font-size:1.7em;}
 
 /********************* shopping Demo-1 **********************/
@@ -34,41 +36,12 @@ h3.h3{text-align:center;margin:1em;text-transform:capitalize;font-size:1.7em;}
 
 
 
-.nav-item::after{
-  content:'';
-  display:block;
-  width:0px;
-  height:4px;
-  background:#ff0000;
-  transition: 0.2s;
-  margin-top:-10px;
+
+
+body {
+  margin: 0;
+  padding: 0;
 }
-
-.nav-item:hover::after{width:100%;}
-
-
-.nav-link{padding:15px 5px;transition:0.2s;}
-
-.navbar-nav .nav-link {
-  
-  color:#000;
-  font-weight:bold;
-  font-size:18px;
-}
-
-.navbar-nav .active > .nav-link{
-
-  width:100%;
-  height:51px;
-  
-border-bottom: .25rem solid transparent;
-border-bottom-color: #ed4137;
- 
-}
-
-/* BASIC */
-
-
 
 
 body {
@@ -120,6 +93,7 @@ h2 {
   box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
   text-align: center;
 }
+
 
 #formFooter {
   background-color: #f6f6f6;
