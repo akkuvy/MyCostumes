@@ -1,29 +1,11 @@
-{{!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script><nav class="navbar navbar-expand-lg navbar-light "> 
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="/">MyCostumes</a>
-      </li>
-      
-    </ul>
-  </div>
-</nav>
- 
+{{!-- 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-
- --}}
-
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 
-</head> 
-<body>
+
   <style>
     .navbar{
   margin-top: 20px;
@@ -31,6 +13,7 @@
   background-color: white;
 }
   </style>
+   
 <div class="container">
     <nav class="navbar navbar-default">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -51,7 +34,7 @@
         <a class="n" href="/order">Myorders</a>
       </li>
       <li class="">
-        <a class="" href="/cart">Cart<span class="badge badge-dark" id="cart-count">{{cartCount}}</span></a>
+        <a class="" href="/cart">Cart</a>
       </li>
        <li class="">
         <a class="nav-link" href="/contact">Contact</a>
@@ -75,7 +58,7 @@
                 
       <ul class="nav navbar-nav navbar-right">
        <li class="">
-        <a class="nav-link" href="/profile"><i class="fa fa-user" aria-hidden="true"></i>{{user.username}}</a>
+        <a class="nav-link" href="/profile"></a>
       </li>
       
     
@@ -84,3 +67,60 @@
     </nav>
 </div>
 
+ --}}
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--  <title>Responsive Sticky Navbar | CodingNepal</title> -->
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+<body>
+  <nav class="navbar">
+    <div class="content">
+      <div class="logo">
+        <a href="/">MyCostumes</a>
+      </div>
+      <ul class="menu-list">
+        <div class="icon cancel-btn">
+          <i class="fas fa-times"></i>
+        </div>
+        <li><a href="/">Home</a></li>
+        <li><a href="/order">My Orders</a></li>
+        <li><a href="/cart">Cart<span class="badge badge-dark" id="cart-count">{{cartCount}}</span></a></li>
+        <li><a href="/contact">Contact</a></li>
+        {{#if user}}
+         <li><a href="/logout">logout</a></li>
+         {{else}}
+        <li><a href="/login">login</a></li>
+        {{/if}}
+        <li><a href="/profile"><i class="fa fa-user" aria-hidden="true"></i>{{user.username}}</a></li>
+      </ul>
+      <div class="icon menu-btn">
+        <i class="fas fa-bars"></i>
+      </div>
+    </div>
+  </nav>
+
+ 
+  <script>
+    const body = document.querySelector("body");
+    const navbar = document.querySelector(".navbar");
+    const menuBtn = document.querySelector(".menu-btn");
+    const cancelBtn = document.querySelector(".cancel-btn");
+    menuBtn.onclick = ()=>{
+      navbar.classList.add("show");
+      menuBtn.classList.add("hide");
+      body.classList.add("disabled");
+    }
+    cancelBtn.onclick = ()=>{
+      body.classList.remove("disabled");
+      navbar.classList.remove("show");
+      menuBtn.classList.remove("hide");
+    }
+    window.onscroll = ()=>{
+      this.scrollY > 20 ? navbar.classList.add("sticky") : navbar.classList.remove("sticky");
+    }
+  </script>
