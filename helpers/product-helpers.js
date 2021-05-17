@@ -13,6 +13,7 @@ module.exports = {
       .collection("product")
       .insertOne(product)
       .then((data) => {
+        console.log(data);
         callback(data.ops[0]._id);
       });
   },
